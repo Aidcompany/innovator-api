@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Integer>, PagingAndSortingRepository<News, Integer> {
 
-    Page<News> findAll(Pageable pageable);
+//    Page<News> findAll(Pageable pageable);
 }

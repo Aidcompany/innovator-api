@@ -92,21 +92,6 @@ public class NewsController {
         }
     }
 
-//    @GetMapping(value = "/news/photo/{name}", produces = MediaType.IMAGE_JPEG_VALUE)
-//    public ResponseEntity<StreamingResponseBody> getPicture(@PathVariable String name) throws IOException {
-//        InputStream inputStream = Files.newInputStream(Path.of(uploadPathPicture, name));
-//        return ResponseEntity.ok(inputStream::transferTo);
-//    }
-
-
-//    @GetMapping(value = "/news/stream/{name}")
-//    public void getVideo(@PathVariable String name, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        File videoFile = new File(uploadPathVideo + name);
-//        request.setAttribute(NewsService.ATTR_FILE, videoFile);
-//        newsService.handleRequest(request, response);
-//    }
-
-
     @PostMapping("/news_add")
     public ResponseEntity<News> addNews(@RequestBody News news) {
         UserAuth userAuth = userDetailsService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get();

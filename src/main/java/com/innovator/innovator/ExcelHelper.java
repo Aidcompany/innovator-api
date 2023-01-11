@@ -21,7 +21,7 @@ public class ExcelHelper {
             sheet.setColumnWidth(1, 50 * 256);
             sheet.setColumnWidth(2, 25 * 256);
             sheet.setColumnWidth(3, 20 * 256);
-            sheet.setColumnWidth(4, 80 * 256);
+            sheet.setColumnWidth(4, 150 * 256);
 
             Font fontHeader = workbook.createFont();
             fontHeader.setFontHeightInPoints((short) 20);
