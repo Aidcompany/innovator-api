@@ -4,7 +4,7 @@ WORKDIR workspace
 COPY ./pom.xml /workspace
 COPY ./src /workspace/src
 RUN mvn -f pom.xml clean install -DskipTests
-#
+
 FROM openjdk:11
 COPY --from=build /workspace/target/*.jar innovator-backend.jar
 EXPOSE 8080
