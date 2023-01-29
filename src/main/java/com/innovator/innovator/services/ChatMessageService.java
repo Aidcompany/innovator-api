@@ -16,8 +16,8 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public void save(ChatMessage cm) {
-        chatMessageRepository.save(cm);
+    public ChatMessage save(ChatMessage cm) {
+       return chatMessageRepository.save(cm);
     }
 
     public List<ChatMessage> findAll() {

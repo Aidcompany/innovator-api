@@ -43,6 +43,12 @@ public class ChatController {
         chatMessageService.sendMessage(chatMessage);
     }
 
+    @MessageMapping("/sendMessage")
+    @SendTo("/topic/general")
+    public ChatMessage sendMessage(ChatMessage chatMessage) {
+        return chatMessageService.save(chatMessage);
+    }
+
     @GetMapping("/getChat")
     public ResponseEntity<?> getChat() {
         return ResponseEntity.ok(chatMessageService.findAll());
