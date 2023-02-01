@@ -1,14 +1,12 @@
-package com.innovator.innovator.configs.websocket.model;
+package com.innovator.innovator.models.chat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,10 +22,9 @@ public class ChatMessage {
 
     private String text;
     private String login;
-    private LocalDate date;
+    private Instant date;
     private String avatar;
 
-
-
-
+    @OneToMany(mappedBy = "chatMessage", cascade = CascadeType.ALL)
+    private List<ReactionMessage> like;
 }

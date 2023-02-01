@@ -1,9 +1,10 @@
 package com.innovator.innovator.controllers;
 
-import com.innovator.innovator.configs.websocket.model.ChatMessage;
+import com.innovator.innovator.models.chat.ChatMessage;
 import com.innovator.innovator.services.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,40 +18,29 @@ public class ChatController {
 
     private final ChatMessageService chatMessageService;
 
-//    @MessageMapping("/chat.sendMessage")
-//    @SendTo("/topic/public")
-//    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-//        ChatMessage cm = new ChatMessage();
-//        cm.setText(chatMessage.getText());
-//        cm.setDate(chatMessage.getDate());
-//        cm.setLogin(chatMessage.getLogin());
-//        cm.setAvatar(chatMessage.getAvatar());
-//
-//        chatMessageService.save(cm);
-//
-//        return chatMessage;
-//    }
-//
-//    @MessageMapping("/chat.addUser")
-//    @SendTo("/topic/public")
-//    public ChatMessage addUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-//        headerAccessor.getSessionAttributes().put("username", chatMessage.getLogin());
-//        return chatMessage;
-//    }
-
     @MessageMapping("/chat")
     public void sendMessageGeneral(ChatMessage chatMessage) {
         chatMessageService.sendMessage(chatMessage);
     }
 
-    @MessageMapping("/sendMessage")
-    @SendTo("/topic/general")
-    public ChatMessage sendMessage(ChatMessage chatMessage) {
+    @MessageMapping("/changeMessage/{id}")
+    @SendTo("/topic/messages")
+    public ChatMessage changeMessage(@DestinationVariable int id, ChatMessage chatMessageBody) {
+        ChatMessage chatMessage = chatMessageService.findById(id);
+//        chatMessage.setLogin(chatMessageBody.getLogin());
+        chatMessage.setText(chatMessageBody.getText());
+
         return chatMessageService.save(chatMessage);
     }
 
-    @GetMapping("/getChat")
-    public ResponseEntity<?> getChat() {
-        return ResponseEntity.ok(chatMessageService.findAll());
-    }
+//    @MessageMapping("/sendMessage")
+//    @SendTo("/topic/general")
+//    public ChatMessage sendMessage(ChatMessage chatMessage) {
+//        return chatMessageService.save(chatMessage);
+//    }
+
+//    @GetMapping("/getChat")
+//    public ResponseEntity<?> getChat() {
+//        return ResponseEntity.ok(chatMessageService.findAll());
+//    }
 }

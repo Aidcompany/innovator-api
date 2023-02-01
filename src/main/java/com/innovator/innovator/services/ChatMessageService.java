@@ -1,11 +1,12 @@
 package com.innovator.innovator.services;
 
-import com.innovator.innovator.configs.websocket.model.ChatMessage;
+import com.innovator.innovator.models.chat.ChatMessage;
 import com.innovator.innovator.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,11 +25,16 @@ public class ChatMessageService {
         return chatMessageRepository.findAll();
     }
 
+    public ChatMessage findById(int id) {
+        return chatMessageRepository.findById(id).get();
+    }
+
     public void sendMessage(ChatMessage chatMessage) {
         ChatMessage cm = new ChatMessage();
         cm.setText(chatMessage.getText());
-        cm.setDate(LocalDate.now());
+        cm.setDate(Instant.now());
         cm.setLogin(chatMessage.getLogin());
+        cm.setAvatar(chatMessage.getAvatar());
 
         chatMessageRepository.save(cm);
 
