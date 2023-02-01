@@ -1,5 +1,6 @@
 package com.innovator.innovator.models.chat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,5 +23,6 @@ public class ReactionMessage {
     private Reaction reaction;
 
     @ManyToOne
+    @JsonIgnore
     private ChatMessage chatMessage;
 }

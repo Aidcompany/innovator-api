@@ -1,13 +1,11 @@
 package com.innovator.innovator.models.chat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -17,7 +15,6 @@ public class ChatMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Integer id;
 
     private String text;
@@ -26,5 +23,5 @@ public class ChatMessage {
     private String avatar;
 
     @OneToMany(mappedBy = "chatMessage", cascade = CascadeType.ALL)
-    private List<ReactionMessage> like;
+    private List<ReactionMessage> reactionMessages;
 }
