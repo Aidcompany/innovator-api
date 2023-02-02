@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +44,11 @@ public class ChatController {
         }
 
     }
+
+//    @PostMapping
+//    public void t(@RequestBody ChatRequest chatRequest) {
+//        chatMessageService.reactionMessage(chatRequest);
+//    }
 
 //    @MessageMapping("/reactionMessage/{id}")
 ////    @SendTo("/topic/messages")

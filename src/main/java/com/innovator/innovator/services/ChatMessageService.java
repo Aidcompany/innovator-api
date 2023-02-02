@@ -55,7 +55,7 @@ public class ChatMessageService {
         cm.setAvatar(chatMessage.getAvatar());
 
         cm = chatMessageRepository.save(cm);
-
+        System.out.println(getChatResponse(cm, "send"));
         simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(cm, "send"));
     }
 
@@ -83,12 +83,12 @@ public class ChatMessageService {
         } else {
             ReactionMessage rm = new ReactionMessage();
             rm.setReaction(chatRequest.getReaction());
-            rm.setLogin(chatMessage.getLogin());
+            rm.setLogin(chatRequest.getLogin());
             rm.setChatMessage(chatMessage);
 
             reactionMessageRepository.save(rm);
         }
-
+        System.out.println(getChatResponse(chatMessage, "reaction"));
         simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(chatMessage, "reaction"));
     }
 
@@ -100,19 +100,22 @@ public class ChatMessageService {
         chatResponse.setText(cm.getText());
         chatResponse.setAvatar(cm.getAvatar());
         chatResponse.setCommand(command);
-        for (var reaction : cm.getReactionMessages()) {
-            switch (reaction.getReaction()) {
-                case LIKE:
-                    chatResponse.getLike().add(reaction.getLogin());
-                    break;
-                case DISLIKE:
-                    chatResponse.getDislike().add(reaction.getLogin());
-                    break;
-                case FIRE:
-                    chatResponse.getFire().add(reaction.getLogin());
-                    break;
-                case RED_HEART:
-                    chatResponse.getRedHeart().add(reaction.getLogin());
+
+        if (cm.getReactionMessages() != null) {
+            for (var reaction : cm.getReactionMessages()) {
+                switch (reaction.getReaction()) {
+                    case LIKE:
+                        chatResponse.getLike().add(reaction.getLogin());
+                        break;
+                    case DISLIKE:
+                        chatResponse.getDislike().add(reaction.getLogin());
+                        break;
+                    case FIRE:
+                        chatResponse.getFire().add(reaction.getLogin());
+                        break;
+                    case RED_HEART:
+                        chatResponse.getRedHeart().add(reaction.getLogin());
+                }
             }
         }
 
