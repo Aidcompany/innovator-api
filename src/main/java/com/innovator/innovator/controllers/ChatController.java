@@ -1,10 +1,8 @@
 package com.innovator.innovator.controllers;
 
 import com.innovator.innovator.models.chat.ChatMessage;
-import com.innovator.innovator.models.chat.Reaction;
 import com.innovator.innovator.models.chat.ReactionMessage;
 import com.innovator.innovator.payload.response.ChatResponse;
-import com.innovator.innovator.repository.ReactionMessageRepository;
 import com.innovator.innovator.services.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,13 +11,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -27,7 +26,7 @@ import java.util.Optional;
 public class ChatController {
 
     private final ChatMessageService chatMessageService;
-    private final ReactionMessageRepository reactionMessageRepository;
+//    private final ReactionMessageRepository reactionMessageRepository;
 
     @MessageMapping("/chat")
     public void sendMessageGeneral(ChatMessage chatMessage) {
@@ -38,6 +37,12 @@ public class ChatController {
 //    @SendTo("/topic/messages")
     public void changeMessage(@DestinationVariable int id, ReactionMessage reactionMessageBody) {
         chatMessageService.reactionMessage(id, reactionMessageBody);
+    }
+
+    @MessageMapping("/deleteMessage/{id}")
+    @SendTo("/topic/messages")
+    public void deleteMessage (@DestinationVariable int id) {
+        chatMessageService.deleteById(id);
     }
 
 //    @MessageMapping("/sendMessage")

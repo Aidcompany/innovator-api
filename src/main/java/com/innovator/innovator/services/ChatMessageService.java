@@ -41,6 +41,10 @@ public class ChatMessageService {
         return chatMessageRepository.findAll(p);
     }
 
+    public void deleteById(int id) {
+        chatMessageRepository.deleteById(id);
+    }
+
     public void sendMessage(ChatMessage chatMessage) {
         ChatMessage cm = new ChatMessage();
         cm.setText(chatMessage.getText());
