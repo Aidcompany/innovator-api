@@ -22,7 +22,7 @@ public class ReactionMessage {
     @Enumerated(EnumType.STRING)
     private Reaction reaction;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     private ChatMessage chatMessage;
 }

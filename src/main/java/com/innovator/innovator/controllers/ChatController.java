@@ -45,10 +45,10 @@ public class ChatController {
 
     }
 
-//    @PostMapping
-//    public void t(@RequestBody ChatRequest chatRequest) {
-//        chatMessageService.reactionMessage(chatRequest);
-//    }
+    @PostMapping
+    public void t(@RequestBody ChatRequest chatRequest) {
+        chatMessageService.reactionMessage(chatRequest);
+    }
 
 //    @MessageMapping("/reactionMessage/{id}")
 ////    @SendTo("/topic/messages")
