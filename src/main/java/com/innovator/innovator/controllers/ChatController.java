@@ -2,6 +2,7 @@ package com.innovator.innovator.controllers;
 
 import com.innovator.innovator.models.chat.ChatMessage;
 import com.innovator.innovator.models.chat.ReactionMessage;
+import com.innovator.innovator.payload.request.ChatRequest;
 import com.innovator.innovator.payload.response.ChatResponse;
 import com.innovator.innovator.services.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -29,21 +30,35 @@ public class ChatController {
 //    private final ReactionMessageRepository reactionMessageRepository;
 
     @MessageMapping("/chat")
-    public void sendMessageGeneral(ChatMessage chatMessage) {
-        chatMessageService.sendMessage(chatMessage);
+    public void sendMessageGeneral(ChatRequest chatRequest) {
+
+        switch (chatRequest.getCommand()) {
+            case "send":
+                chatMessageService.sendMessage(chatRequest);
+                break;
+
+            case "delete":
+                chatMessageService.deleteMessage(chatRequest.getId());
+                break;
+
+            case "reaction":
+                chatMessageService.reactionMessage(chatRequest);
+                break;
+        }
+
     }
 
-    @MessageMapping("/reactionMessage/{id}")
+//    @MessageMapping("/reactionMessage/{id}")
+////    @SendTo("/topic/messages")
+//    public void changeMessage(@DestinationVariable int id, ReactionMessage reactionMessageBody) {
+//        chatMessageService.reactionMessage(id, reactionMessageBody);
+//    }
+
+//    @MessageMapping("/deleteMessage/{id}")
 //    @SendTo("/topic/messages")
-    public void changeMessage(@DestinationVariable int id, ReactionMessage reactionMessageBody) {
-        chatMessageService.reactionMessage(id, reactionMessageBody);
-    }
-
-    @MessageMapping("/deleteMessage/{id}")
-    @SendTo("/topic/messages")
-    public void deleteMessage (@DestinationVariable int id) {
-        chatMessageService.deleteById(id);
-    }
+//    public void deleteMessage (@DestinationVariable int id) {
+//        chatMessageService.deleteById(id);
+//    }
 
 //    @MessageMapping("/sendMessage")
 //    @SendTo("/topic/general")
@@ -84,7 +99,7 @@ public class ChatController {
 
         List<ChatResponse> chatResponses = new ArrayList<>();
         for (var cm : chatMessages.getContent()) {
-            chatResponses.add(chatMessageService.getChatResponse(cm));
+            chatResponses.add(chatMessageService.getChatResponse(cm, null));
         }
 
         return ResponseEntity.ok(chatResponses);

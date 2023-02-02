@@ -3,6 +3,7 @@ package com.innovator.innovator.services;
 import com.innovator.innovator.models.chat.ChatMessage;
 import com.innovator.innovator.models.chat.Reaction;
 import com.innovator.innovator.models.chat.ReactionMessage;
+import com.innovator.innovator.payload.request.ChatRequest;
 import com.innovator.innovator.payload.response.ChatResponse;
 import com.innovator.innovator.repository.ChatMessageRepository;
 import com.innovator.innovator.repository.ReactionMessageRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,7 +28,7 @@ public class ChatMessageService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     public ChatMessage save(ChatMessage cm) {
-       return chatMessageRepository.save(cm);
+        return chatMessageRepository.save(cm);
     }
 
     public List<ChatMessage> findAll() {
@@ -45,51 +47,59 @@ public class ChatMessageService {
         chatMessageRepository.deleteById(id);
     }
 
-    public void sendMessage(ChatMessage chatMessage) {
+    public void sendMessage(ChatRequest chatMessage) {
         ChatMessage cm = new ChatMessage();
         cm.setText(chatMessage.getText());
         cm.setDate(Instant.now());
         cm.setLogin(chatMessage.getLogin());
         cm.setAvatar(chatMessage.getAvatar());
 
-        chatMessageRepository.save(cm);
+        cm = chatMessageRepository.save(cm);
 
-        simpMessagingTemplate.convertAndSend("/topic/messages", chatMessage);
+        simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(cm, "send"));
     }
 
-    public void reactionMessage(int id, ReactionMessage reactionMessageBody) {
-        ChatMessage chatMessage = chatMessageRepository.findById(id).get();
+    public void deleteMessage(int id) {
+        chatMessageRepository.deleteById(id);
+        simpMessagingTemplate.convertAndSend("/topic/messages", Map.of(
+                "id", id,
+                "command", "delete"));
+    }
+
+    public void reactionMessage(ChatRequest chatRequest) {
+        ChatMessage chatMessage = chatMessageRepository.findById(chatRequest.getId()).get();
 
         Optional<ReactionMessage> reactionMessage = reactionMessageRepository
-                .findByLoginAndChatMessage(reactionMessageBody.getLogin(), chatMessage);
+                .findByLoginAndChatMessage(chatRequest.getLogin(), chatMessage);
 
 
         if (reactionMessage.isPresent()) {
-            if (reactionMessageBody.getReaction().equals(reactionMessage.get().getReaction())) {
+            if (chatRequest.getReaction().equals(reactionMessage.get().getReaction())) {
                 reactionMessageRepository.delete(reactionMessage.get());
             } else {
-                reactionMessage.get().setReaction(reactionMessageBody.getReaction());
+                reactionMessage.get().setReaction(chatRequest.getReaction());
                 reactionMessageRepository.save(reactionMessage.get());
             }
         } else {
             ReactionMessage rm = new ReactionMessage();
-            rm.setReaction(reactionMessageBody.getReaction());
-            rm.setLogin(reactionMessageBody.getLogin());
+            rm.setReaction(chatRequest.getReaction());
+            rm.setLogin(chatMessage.getLogin());
             rm.setChatMessage(chatMessage);
 
             reactionMessageRepository.save(rm);
         }
 
-        simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(chatMessage));
+        simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(chatMessage, "reaction"));
     }
 
-    public ChatResponse getChatResponse(ChatMessage cm) {
+    public ChatResponse getChatResponse(ChatMessage cm, String command) {
         ChatResponse chatResponse = new ChatResponse();
         chatResponse.setLogin(cm.getLogin());
         chatResponse.setId(cm.getId());
         chatResponse.setDate(cm.getDate());
         chatResponse.setText(cm.getText());
         chatResponse.setAvatar(cm.getAvatar());
+        chatResponse.setCommand(command);
         for (var reaction : cm.getReactionMessages()) {
             switch (reaction.getReaction()) {
                 case LIKE:

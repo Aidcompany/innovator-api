@@ -1,5 +1,6 @@
 package com.innovator.innovator.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,9 @@ public class ChatResponse {
     private String login;
     private Instant date;
     private String avatar;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String command;
 
     private List<String> like = new ArrayList<>();
     private List<String> dislike = new ArrayList<>();
