@@ -22,6 +22,6 @@ public class ChatMessage {
     private Instant date;
     private String avatar;
 
-    @OneToMany(mappedBy = "chatMessage", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chatMessage", cascade = CascadeType.ALL)
     private List<ReactionMessage> reactionMessages;
 }
