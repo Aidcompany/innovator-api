@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+//@Transactional
 public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
@@ -102,7 +104,7 @@ public class ChatMessageService {
         chatResponse.setCommand(command);
 
         if (cm.getReactionMessages() != null) {
-            for (var reaction : cm.getReactionMessages()) {
+            for (var reaction : reactionMessageRepository.findAllByChatMessage(cm)) {
                 switch (reaction.getReaction()) {
                     case LIKE:
                         chatResponse.getLike().add(reaction.getLogin());
