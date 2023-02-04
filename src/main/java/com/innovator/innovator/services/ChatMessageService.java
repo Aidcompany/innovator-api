@@ -1,7 +1,6 @@
 package com.innovator.innovator.services;
 
 import com.innovator.innovator.models.chat.ChatMessage;
-import com.innovator.innovator.models.chat.Reaction;
 import com.innovator.innovator.models.chat.ReactionMessage;
 import com.innovator.innovator.payload.request.ChatRequest;
 import com.innovator.innovator.payload.response.ChatResponse;
@@ -13,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -123,23 +120,4 @@ public class ChatMessageService {
 
         return chatResponse;
     }
-
-//    public ReactionMessage setReactionMessage(ReactionMessage reactionMessage) {
-//
-//        List<ReactionMessage> reactionMessageList = reactionMessageRepository.findAll();
-//
-//        for (var reaction: reactionMessageList) {
-//            switch (reactionMessage.getReaction()) {
-//                case LIKE:
-//                    if (reactionMessage.getLogin())
-//            }
-//        }
-//
-//        switch (reactionMessage.getReaction()) {
-//            case LIKE:
-//
-//        }
-//
-//
-//    }
 }
