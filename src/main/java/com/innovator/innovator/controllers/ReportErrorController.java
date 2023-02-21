@@ -53,7 +53,7 @@ public class ReportErrorController {
 
     @PostMapping("/report_error/{clientId}")
     public ResponseEntity<Map<String, String>> reportError(@PathVariable int clientId, @RequestBody ReportError reportErrorBody) {
-        User user = userService.findById(clientId);
+        User user = userService.findById(clientId).get();
         ReportError reportError = new ReportError();
 
         if (user == null)

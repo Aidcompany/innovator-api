@@ -20,7 +20,7 @@ public class RecommendationController {
 
     @PostMapping("/send_recommendation/{clientId}")
     public ResponseEntity<Map<String, String>> sendRecommendation(@PathVariable int clientId, @RequestBody Recommendation recommendationBody) {
-        User user = userService.findById(clientId);
+        User user = userService.findById(clientId).get();
         Recommendation recommendation = new Recommendation();
 
         recommendation.setMessageText(recommendationBody.getMessageText());

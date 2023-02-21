@@ -9,7 +9,6 @@ import com.innovator.innovator.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,7 +54,7 @@ public class UserController {
 
     @GetMapping("/user_by_id/{clientId}")
     public ResponseEntity<User> userById(@PathVariable int clientId) {
-        return ResponseEntity.ok(userService.findById(clientId));
+        return ResponseEntity.ok(userService.findById(clientId).get());
     }
 
     @PostMapping("/add_user")
@@ -69,7 +68,7 @@ public class UserController {
 
     @PutMapping("/update_user/{clientId}")
     public ResponseEntity<User> updateUser(@PathVariable int clientId, @RequestBody User userBody) {
-        User user = userService.findById(clientId);
+        User user = userService.findById(clientId).get();
         user.setEmail(userBody.getEmail());
         user.setFullName(userBody.getFullName());
 
@@ -110,7 +109,7 @@ public class UserController {
 
     @PostMapping("/add_donate/{id}")
     public ResponseEntity<?> addDonate(@RequestBody DonateRequest donateRequest, @PathVariable int id) {
-        User user = userService.findById(id);
+        User user = userService.findById(id).get();
         user.setDonate(donateRequest.getSum());
         userService.saveUser(user);
         return ResponseEntity.ok(new MessageResponse("Donate add to user (" + user.getDonate() + ")"));
@@ -118,7 +117,7 @@ public class UserController {
 
     @PostMapping(value = "/set_profile_avatar/{clientId}")
     public ResponseEntity<Map<String, String>> setAvatar(@PathVariable int clientId, @RequestParam("avatar") MultipartFile avatar) throws IOException {
-        User user = userService.findById(clientId);
+        User user = userService.findById(clientId).get();
 
         if (avatar == null || user == null) {
             return ResponseEntity.notFound().build();

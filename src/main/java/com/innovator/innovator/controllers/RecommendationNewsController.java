@@ -20,7 +20,7 @@ public class RecommendationNewsController {
 
     @PostMapping("/send_recommendation_news/{clientId}")
     public ResponseEntity<Map<String, String>> sendRecNews(@PathVariable int clientId, @RequestBody RecommendationNews recommendationNews) {
-        User user = userService.findById(clientId);
+        User user = userService.findById(clientId).get();
         recommendationNews.setUser(user);
         recommendatonNewsService.saveNews(recommendationNews);
 

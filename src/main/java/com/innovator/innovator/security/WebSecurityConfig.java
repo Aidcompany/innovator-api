@@ -59,7 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/set_profile_avatar/{clientId}", "/api/news", "/api/video/stream/{id}", "/api/video/upload",
                         "/api/get_blocks/{index}", "/api/add_donate/{id}",
                         "/api/get_useful", "/api/useful/get_picture/{name}/{index}", "/api/chat/**",
-                        "/ws/**").permitAll()
+                        "/ws/**", "/api/addProduct/{clientId}", "/api/getProduct/{productId}",
+                        "/api/getProducts/{clientId}", "/api/acceptProduct/{productId}/{clientId}",
+                        "/api/removeProductUser/{productId}/{clientId}", "/api/deleteProduct/{id}").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

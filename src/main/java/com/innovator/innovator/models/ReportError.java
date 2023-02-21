@@ -31,7 +31,9 @@ public class ReportError {
     @JsonIgnoreProperties(value = {
             "reportErrorList",
             "recommendationList",
-            "recommendationNewsList"
+            "recommendationNewsList",
+            "products",
+            "product"
     })
     private User user;
 
