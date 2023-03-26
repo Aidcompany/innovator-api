@@ -43,13 +43,13 @@ public class ChatController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getChat(@RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<List<ChatResponse>> getChat(@RequestParam(defaultValue = "0") int page) {
         Page<ChatMessage> chatMessages = chatMessageService
                 .findAll(PageRequest.of(page, 50, Sort.by(Sort.Direction.DESC, "id")));
 
         List<ChatResponse> chatResponses = new ArrayList<>();
         for (var cm : chatMessages.getContent()) {
-            chatResponses.add(chatMessageService.getChatResponse(cm, null));
+            chatResponses.add(chatMessageService.parseToChatResponse(cm, null));
         }
 
         return ResponseEntity.ok(chatResponses);

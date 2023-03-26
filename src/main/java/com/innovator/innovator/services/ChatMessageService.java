@@ -54,8 +54,8 @@ public class ChatMessageService {
         cm.setAvatar(chatMessage.getAvatar());
 
         cm = chatMessageRepository.save(cm);
-        System.out.println(getChatResponse(cm, "send"));
-        simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(cm, "send"));
+//        System.out.println(getChatResponse(cm, "send"));
+        simpMessagingTemplate.convertAndSend("/topic/messages", parseToChatResponse(cm, "send"));
     }
 
     public void deleteMessage(int id) {
@@ -87,11 +87,11 @@ public class ChatMessageService {
 
             reactionMessageRepository.save(rm);
         }
-        System.out.println(getChatResponse(chatMessage, "reaction"));
-        simpMessagingTemplate.convertAndSend("/topic/messages", getChatResponse(chatMessage, "reaction"));
+//        System.out.println(getChatResponse(chatMessage, "reaction"));
+        simpMessagingTemplate.convertAndSend("/topic/messages", parseToChatResponse(chatMessage, "reaction"));
     }
 
-    public ChatResponse getChatResponse(ChatMessage cm, String command) {
+    public ChatResponse parseToChatResponse(ChatMessage cm, String command) {
         ChatResponse chatResponse = new ChatResponse();
         chatResponse.setLogin(cm.getLogin());
         chatResponse.setId(cm.getId());
@@ -114,6 +114,7 @@ public class ChatMessageService {
                         break;
                     case RED_HEART:
                         chatResponse.getRedHeart().add(reaction.getLogin());
+                        break;
                 }
             }
         }

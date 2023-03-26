@@ -48,4 +48,13 @@ public class ProductService {
     public void deleteById(int id) {
         productRepository.deleteById(id);
     }
+
+    public void delete(Product p) {
+        productRepository.delete(p);
+    }
+
+    public void deleteAllSharedObjects(Product product) {
+        product.getShared().clear();
+        productRepository.save(product);
+    }
 }

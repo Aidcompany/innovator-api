@@ -53,14 +53,15 @@ public class ProductController {
 
         productService.saveAvatarProduct(productRequest.getAvatar());
 
-        product = productService.save(product);
+        productRequest.getBlocks().forEach(block -> block.setProduct(product));
+        blockRepository.saveAll(productRequest.getBlocks());
 
-        for (var block : productRequest.getBlocks()) {
-            block.setProduct(product);
-            blockRepository.save(block);
-        }
+//        for (var block : productRequest.getBlocks()) {
+//            block.setProduct(product);
+//            blockRepository.save(block);
+//        }
 
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok(productService.save(product));
     }
 
     @PutMapping("/acceptProduct/{productId}/{clientId}")
@@ -89,7 +90,15 @@ public class ProductController {
 
 //    @DeleteMapping("/deleteProduct/{id}")
 //    public ResponseEntity<MessageResponse> deleteProductById(@PathVariable int id ) {
-//        productService.deleteById(id);
+//        Optional<Product> product = productService.findById(id);
+//        if (product.isEmpty()) {
+//            return new ResponseEntity<>(new MessageResponse("Product not found"), HttpStatus.NOT_FOUND);
+//        }
+//
+//
+//        productService.deleteAllSharedObjects(product.get());
+//        productService.delete(product.get());
+//
 //        return ResponseEntity.ok(new MessageResponse("Product deleted!!!"));
 //    }
 }
