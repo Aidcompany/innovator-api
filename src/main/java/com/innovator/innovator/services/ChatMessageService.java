@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional
 public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
@@ -42,10 +41,6 @@ public class ChatMessageService {
         return chatMessageRepository.findAll(p);
     }
 
-    public void deleteById(int id) {
-        chatMessageRepository.deleteById(id);
-    }
-
     public void sendMessage(ChatRequest chatMessage) {
         ChatMessage cm = new ChatMessage();
         cm.setText(chatMessage.getText());
@@ -54,7 +49,7 @@ public class ChatMessageService {
         cm.setAvatar(chatMessage.getAvatar());
 
         cm = chatMessageRepository.save(cm);
-//        System.out.println(getChatResponse(cm, "send"));
+
         simpMessagingTemplate.convertAndSend("/topic/messages", parseToChatResponse(cm, "send"));
     }
 
@@ -87,7 +82,7 @@ public class ChatMessageService {
 
             reactionMessageRepository.save(rm);
         }
-//        System.out.println(getChatResponse(chatMessage, "reaction"));
+
         simpMessagingTemplate.convertAndSend("/topic/messages", parseToChatResponse(chatMessage, "reaction"));
     }
 

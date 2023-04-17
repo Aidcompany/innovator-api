@@ -27,7 +27,7 @@ public class ActivityController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getActivity(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Map<String, Object>> getActivity(@RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "5") int pageSize) {
         Map<String, Object> response = new HashMap<>();
         Page<Activity> pageTuts = activityRepository.findAll(PageRequest.of(page, pageSize,
